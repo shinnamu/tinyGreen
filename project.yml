@@ -1,0 +1,50 @@
+name: tinyGreen
+options:
+  bundleIdPrefix: fyi.shinnamu
+  deploymentTarget:
+    macOS: "13.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+  groupSortPosition: top
+  xcodeVersion: "15.0"
+
+settings:
+  base:
+    SYMROOT: "$(SRCROOT)/build/sym"
+    SWIFT_VERSION: "5.9"
+    MACOSX_DEPLOYMENT_TARGET: "13.0"
+    DEAD_CODE_STRIPPING: YES
+    CLANG_ENABLE_MODULES: YES
+    SWIFT_TREAT_WARNINGS_AS_ERRORS: NO
+
+targets:
+  tinyGreen:
+    type: application
+    platform: macOS
+    deploymentTarget: "13.0"
+    sources:
+      - tinyGreen
+    info:
+      path: tinyGreen/Resources/Info.plist
+      properties:
+        LSUIElement: true
+        CFBundleDisplayName: TinyGreen
+        LSMinimumSystemVersion: "13.0"
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        NSHumanReadableCopyright: "© 2026 도구 제작자 신나무로부터."
+        NSInputMonitoringUsageDescription: "TinyGreen이 선택한 전환 키를 시스템 입력 소스 단축키에 연결하고 현재 상태를 표시합니다."
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: fyi.shinnamu.tinyGreen
+        PRODUCT_NAME: tinyGreen
+        MARKETING_VERSION: "2.1.1"
+        CURRENT_PROJECT_VERSION: "19"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ENABLE_HARDENED_RUNTIME: YES
+        COMBINE_HIDPI_IMAGES: YES
+        CODE_SIGN_IDENTITY: "Apple Development"
+        CODE_SIGN_INJECT_BASE_ENTITLEMENTS: NO
+        CODE_SIGNING_ALLOWED: YES
+        CODE_SIGN_STYLE: Manual
+        DEVELOPMENT_TEAM: "7G298A4T46"
