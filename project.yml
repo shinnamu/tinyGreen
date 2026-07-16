@@ -1,0 +1,49 @@
+name: tinyGreen
+options:
+  bundleIdPrefix: fyi.shinnamu
+  deploymentTarget:
+    macOS: "13.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+  groupSortPosition: top
+  xcodeVersion: "15.0"
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MACOSX_DEPLOYMENT_TARGET: "13.0"
+    DEAD_CODE_STRIPPING: YES
+    CLANG_ENABLE_MODULES: YES
+    SWIFT_TREAT_WARNINGS_AS_ERRORS: NO
+
+targets:
+  tinyGreen:
+    type: application
+    platform: macOS
+    deploymentTarget: "13.0"
+    sources:
+      - tinyGreen
+    info:
+      path: tinyGreen/Resources/Info.plist
+      properties:
+        LSUIElement: true
+        CFBundleDisplayName: tinyGreen
+        LSMinimumSystemVersion: "13.0"
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        NSHumanReadableCopyright: "© 2026 도구 제작자 신나무로부터."
+        NSInputMonitoringUsageDescription: "tinyGreen이 Caps Lock 입력을 가로채서 한영 전환을 즉시 처리합니다."
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: fyi.shinnamu.tinyGreen
+        PRODUCT_NAME: tinyGreen
+        MARKETING_VERSION: "2.0.1"
+        CURRENT_PROJECT_VERSION: "17"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ENABLE_HARDENED_RUNTIME: YES
+        COMBINE_HIDPI_IMAGES: YES
+        CODE_SIGN_IDENTITY: "Apple Development"
+        CODE_SIGNING_ALLOWED: YES
+        CODE_SIGN_STYLE: Manual
+        DEVELOPMENT_TEAM: "7G298A4T46"
+
