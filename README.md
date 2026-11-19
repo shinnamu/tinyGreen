@@ -1,3 +1,5 @@
+<p align="center">A macOS menu bar app: bind any key to the system Korean/English switch, and see the current input on the LED.</p>
+
 <p align="center">
   <img src="gallery/led.gif" width="320">
 </p>
