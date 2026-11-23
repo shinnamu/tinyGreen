@@ -1,5 +1,8 @@
 import Foundation
 
+/// NotificationCenter observer 토큰 묶음 — start/stop pairing 자동화.
+/// `DistributedNotificationCenter` 도 `NotificationCenter` 서브클래스라 동일 인터페이스로 처리.
+/// 호출은 메인 스레드 가정 (NSApp lifecycle 에서만 사용 — entries 배열 lock 없음).
 final class ObserverBag {
     private var entries: [(NotificationCenter, NSObjectProtocol)] = []
 

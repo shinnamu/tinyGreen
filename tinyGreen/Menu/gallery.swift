@@ -1,8 +1,14 @@
 #if DEBUG
 import AppKit
 
+/// UI 갤러리 — 사용자가 마주치는 모든 표면을 한 윈도우에 모아 본다. Debug 빌드 전용 (#if DEBUG, Release 미포함).
+/// Render·Glyphs·StatusMenu·Permissions 의 실제 코드를 그대로 호출하므로 갤러리가 진짜 UI 와 갈라지지 않는다.
+/// 메뉴·About·alert 데모는 실제 statusItem 오염을 피하려 갤러리 전용 StatusMenu(demo) 로 그린다
+/// (start 안 하므로 메뉴바 아이콘 안 뜸 · 메뉴는 delegate nil + action 제거로 조건부 줄 강제 표시 + 클릭 무력화).
+/// app.swift applicationDidFinishLaunching 의 #if DEBUG 블록에서 띄운다.
 final class DebugGallery: NSObject {
     private var window: NSWindow?
+    /// 데모 전용 — start() 안 함. 메뉴 빌드·About·alert 만 빌려 쓴다 (실제 statusMenu 와 분리).
     private lazy var demo = StatusMenu(shiftLock: ShiftLock(), led: MenuBarLED())
 
     func show() {
@@ -86,6 +92,7 @@ final class DebugGallery: NSObject {
         window = win
     }
 
+    // MARK: - 카드 · 행 · 헤더
 
     private func cardRow(_ cards: [NSView]) -> NSView {
         let row = NSStackView(views: cards)
@@ -102,6 +109,7 @@ final class DebugGallery: NSObject {
         return f
     }
 
+    /// 메뉴바처럼 약한 대비 well 위에 실제 크기로 — template 이미지(비활성 도트·박스)는 시스템 색으로 그려진다.
     private func iconCard(_ label: String, _ image: NSImage) -> NSView {
         let well = makeWell()
         let iv = NSImageView()
@@ -159,7 +167,10 @@ final class DebugGallery: NSObject {
         return b
     }
 
+    // MARK: - 메뉴 정적 미리보기 — 실제 buildMenu 항목을 읽어 행으로 (재구현 아님 → SSOT 유지)
 
+    /// buildMenu() 결과를 순회해 글리프+문구를 리스트로 박제 — NSMenu 는 popUp 으로만 그려지므로
+    /// 항목을 직접 읽어 정적 뷰로 옮긴다. 에러·보안 줄은 강제 표시 (평소 hidden — 한눈에 못 보던 표면).
     private func menuPreview() -> NSView {
         let menu = demo.buildMenu()
         demo.errorItem?.attributedTitle = StatusMenu.secondaryMenuTitle("키 매핑 적용 실패 (데모)")
@@ -234,11 +245,12 @@ final class DebugGallery: NSObject {
         return row
     }
 
+    // MARK: - 액션 — 실제 코드 호출
 
     @objc private func popUpMenu(_ sender: NSButton) {
         let menu = demo.buildMenu()
-        menu.delegate = nil
-        disarm(menu)
+        menu.delegate = nil  // menuWillOpen 우회 → 조건부 줄(에러·보안) 강제 표시 유지
+        disarm(menu)         // 데모 메뉴 클릭은 무력화 (실제 설정 토글 방지), 단 회색 흐림 없이
         demo.errorItem?.attributedTitle = StatusMenu.secondaryMenuTitle("키 매핑 적용 실패 (데모)")
         demo.errorItem?.isHidden = false
         demo.secureInputItem?.attributedTitle = StatusMenu.secondaryMenuTitle("보안 입력 중 — 한영 전환 일시정지")
@@ -246,6 +258,7 @@ final class DebugGallery: NSObject {
         menu.popUp(positioning: nil, at: NSPoint(x: 0, y: sender.bounds.maxY + 4), in: sender)
     }
 
+    /// 메뉴·서브메뉴 항목의 action 제거 — autoenablesItems off 로 enabled 유지(회색 안 됨), 클릭만 무력화.
     private func disarm(_ menu: NSMenu) {
         menu.autoenablesItems = false
         for item in menu.items {

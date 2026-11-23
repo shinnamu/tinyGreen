@@ -1,5 +1,14 @@
 <p align="center">A macOS menu bar app: bind any key to the system Korean/English switch, and see the current input on the LED.</p>
 
+## Overview (English)
+
+**tinyGreen** is a lightweight macOS menu bar app written in Swift that binds `Caps Lock` or `Right Command` to zero-delay Korean/English input-source switching via IOKit HID remapping (`hidutil`) and reflects the current input source on the physical keyboard LED and menu bar indicator.
+
+- **Source:** `tinyGreen/` (Swift, AppKit, CoreGraphics event tap, IOKit HID LED control)
+- **Unit tests:** `tinyGreenTests/tinyGreenTests.swift` (28 XCTest cases covering HID usage mapping, state transitions, and shift-lock routing without a host app bundle)
+- **Architecture Decision Records:** `docs/adr/` (7 ADRs documenting key-hold gate removal, OS input-source delegation, and mode-owned wiring)
+- **License:** MIT
+
 <p align="center">
   <img src="gallery/led.gif" width="320">
 </p>

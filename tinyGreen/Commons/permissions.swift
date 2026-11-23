@@ -3,6 +3,7 @@ import ApplicationServices
 import IOKit
 import IOKit.hid
 
+/// Accessibility / Input Monitoring 권한 체크 + 안내.
 enum Permissions {
     static func checkAccessibility() -> Bool {
         return AXIsProcessTrusted()
@@ -12,6 +13,8 @@ enum Permissions {
         return IOHIDCheckAccess(kIOHIDRequestTypeListenEvent) == kIOHIDAccessTypeGranted
     }
 
+    /// 첫 호출이면 시스템 prompt 표시(동기) + 시스템 설정 목록에 앱 등록.
+    /// 반환: granted=true.
     @discardableResult
     static func requestInputMonitoring() -> Bool {
         return IOHIDRequestAccess(kIOHIDRequestTypeListenEvent)
@@ -34,6 +37,7 @@ enum Permissions {
         NSWorkspace.shared.open(url)
     }
 
+    /// "시스템 설정 열기" 를 누르면 true.
     static func showMissingAlert(missing: [String]) -> Bool {
         NSApp.activate(ignoringOtherApps: true)
         let alert = NSAlert()

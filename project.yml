@@ -10,6 +10,8 @@ options:
 
 settings:
   base:
+    # 빌드 산출물을 프로젝트 안에 고정 — DerivedData 에 두면 `mo clean` 이
+    # 무인으로 쓸어가서 dogfood 인스턴스와 로그인 항목이 함께 증발한다 (2026-07-27).
     SYMROOT: "$(SRCROOT)/build/sym"
     SWIFT_VERSION: "5.9"
     MACOSX_DEPLOYMENT_TARGET: "13.0"
@@ -48,3 +50,25 @@ targets:
         CODE_SIGNING_ALLOWED: YES
         CODE_SIGN_STYLE: Manual
         DEVELOPMENT_TEAM: "7G298A4T46"
+
+  # 테스트 호스트 없음 (의도) — main.swift 가 실행 즉시 단일 인스턴스 가드 + hidutil
+  # 매핑 적용 + 권한 프롬프트를 일으켜서, 앱을 host 로 붙이면 테스트가 시스템을 건드린다.
+  # 대신 순수 로직 소스만 테스트 번들에 직접 컴파일 (같은 번들 = internal 접근, @testable 불필요).
+  tinyGreenTests:
+    type: bundle.unit-test
+    platform: macOS
+    deploymentTarget: "13.0"
+    sources:
+      - tinyGreenTests
+      - tinyGreen/remap.swift
+      - tinyGreen/Indication/morse.swift
+      - tinyGreen/Commons/settings.swift
+      - tinyGreen/Commons/logger.swift
+      - tinyGreen/Commons/notifications.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: fyi.shinnamu.tinyGreenTests
+        GENERATE_INFOPLIST_FILE: YES
+    scheme:
+      testTargets:
+        - tinyGreenTests
